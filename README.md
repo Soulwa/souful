@@ -8,3 +8,5 @@ how to play:
   - the existing beatmap **must be loaded** from soulful_Data/beatmaps- any you make will automatically go there
   - audio must be in the .wav/.ogg format- I recommend using youtube-dl to get any music you want to use, with the command line args -x --audio-format wav
 - beatmaps are automatically zipped up when you finish making them, with the song you chose and the necessary data for the game to replay
+- make sure you add a bpm to the beatmap you make, so the notes you play properly sync up with the music
+- arrow keys/wasd input only for right now
