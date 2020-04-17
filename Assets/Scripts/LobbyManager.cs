@@ -69,20 +69,26 @@ namespace soulful
 
         private void LobbyUI_OnBeatmapLoaded(object sender, BeatmapLoadedArgs e)
         {
-            WipeCurrentlyLoaded();
-            selectedBeatmap = e.beatmap;
-            selectedMusic = e.clip;
-            selectedBeatmapPath = e.pathToBeatmap;
-            Debug.Log(selectedMusic == null);
-            Debug.Log("beatmap loaded");
+            if (e.beatmap != null && e.clip != null && e.pathToBeatmap != null)
+            {
+                WipeCurrentlyLoaded();
+                selectedBeatmap = e.beatmap;
+                selectedMusic = e.clip;
+                selectedBeatmapPath = e.pathToBeatmap;
+                Debug.Log(selectedMusic == null);
+                Debug.Log("beatmap loaded");
+            }
         }
 
         private void LobbyUI_OnSongLoaded(object sender, SongLoadedArgs e)
         {
-            WipeCurrentlyLoaded();
-            selectedSong = e.song;
-            selectedMusic = e.clip;
-            Debug.Log("song loaded");
+            if (e.song != null && e.clip != null)
+            {
+                WipeCurrentlyLoaded();
+                selectedSong = e.song;
+                selectedMusic = e.clip;
+                Debug.Log("song loaded");
+            }
         }
 
         private void Update()
