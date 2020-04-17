@@ -14,6 +14,8 @@ namespace soulful
         [SerializeField]
         private TextMeshProUGUI comboText;
         [SerializeField]
+        private TextMeshProUGUI highComboText;
+        [SerializeField]
         private TextMeshPro noteHitTextPrefab;
         private TextMeshPro activeNoteHitText;
 
@@ -50,6 +52,11 @@ namespace soulful
         public void SetComboText(int combo)
         {
             comboText.text = combo.ToString();
+        }
+
+        public void SetHighComboText(int highCombo)
+        {
+            highComboText.text = highCombo.ToString();
         }
 
         public void Show()

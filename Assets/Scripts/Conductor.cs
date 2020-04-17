@@ -43,6 +43,7 @@ namespace soulful
         private int noteScore = 0;
         private int funkyScore = 0;
         private int combo = 0;
+        private int highestCombo = 0;
 
         [SerializeField]
         private Vector2 noteDestination = Vector2.zero;
@@ -133,40 +134,35 @@ namespace soulful
             {
                 Note targetNote = activeNotes[(int)dir].Peek();
 
-                //if (!targetNote.gameObject.activeSelf)
-                //{
-                //    targetNote = activeNotes[(int)dir].Dequeue();
-                //    noteSpawner.DespawnNote(targetNote);
-                //}
-
                 if (Vector2.Distance(targetNote.transform.position, noteDestination) < dangOffset)
                 {
                     if (Vector2.Distance(targetNote.transform.position, noteDestination) <= funkyOffset)
                     {
                         activeSongUI.CreateNoteHitText("FUNKY", dir);
                         funkyScore++;
-                        noteScore++;
-                        combo++;
-                        activeSongUI.SetNotesText(noteScore, maxNotes);
                         activeSongUI.SetFunkysText(funkyScore, maxNotes);
-                        activeSongUI.SetComboText(combo);
                     }
                     else if (Vector2.Distance(targetNote.transform.position, noteDestination) <= niceOffset)
                     {
                         activeSongUI.CreateNoteHitText("noice!", dir);
-                        noteScore++;
-                        combo++;
-                        activeSongUI.SetNotesText(noteScore, maxNotes);
-                        activeSongUI.SetComboText(combo);
+                        
                     }
                     else if (Vector2.Distance(targetNote.transform.position, noteDestination) <= dangOffset)
                     {
                         activeSongUI.CreateNoteHitText("dang", dir);
-                        noteScore++;
-                        combo++;
-                        activeSongUI.SetNotesText(noteScore, maxNotes);
-                        activeSongUI.SetComboText(combo);
                     }
+
+                    noteScore++;
+                    combo++;
+                    activeSongUI.SetNotesText(noteScore, maxNotes);
+                    activeSongUI.SetComboText(combo);
+
+                    if (combo > highestCombo)
+                    {
+                        highestCombo = combo;
+                        activeSongUI.SetHighComboText(highestCombo);
+                    }
+                    combo = 0;
 
                     targetNote = activeNotes[(int)dir].Dequeue();
                     noteSpawner.DespawnNote(targetNote);
@@ -174,6 +170,12 @@ namespace soulful
                 else
                 {
                     activeSongUI.CreateNoteHitText("BRUH!", dir);
+                    // this might be extraneous
+                    if (combo > highestCombo)
+                    {
+                        highestCombo = combo;
+                        activeSongUI.SetHighComboText(highestCombo);
+                    }
                     combo = 0;
                     activeSongUI.SetComboText(combo);
                 }
@@ -181,6 +183,11 @@ namespace soulful
             else
             {
                 activeSongUI.CreateNoteHitText("BRUH!", dir);
+                if (combo > highestCombo)
+                {
+                    highestCombo = combo;
+                    activeSongUI.SetHighComboText(highestCombo);
+                }
                 combo = 0;
                 activeSongUI.SetComboText(combo);
             }
