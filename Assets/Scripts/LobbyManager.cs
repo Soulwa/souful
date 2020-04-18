@@ -23,16 +23,15 @@ namespace soulful
 
         // might come up with a better idea for how to create these things
         [SerializeField]
-        private Metronome metronomePrefab = null;
+        private TrackPlayer trackPlayerPrefab = null;
         [SerializeField]
         private NoteSpawner noteSpawnerPrefab = null;
         [SerializeField]
         private Conductor conductorPrefab = null;
 
         [SerializeField]
-        private Recorder recorder = null;
         private Conductor currentConductor = null;
-        private Metronome currentMetronome = null;
+        private TrackPlayer trackPlayer = null;
         private NoteSpawner currentNoteSpawner = null;
         
         private SongInfo selectedSong;
@@ -113,18 +112,18 @@ namespace soulful
 
                     lobbyUI.Hide();
 
-                    currentMetronome = Instantiate(metronomePrefab);
-                    currentMetronome.Init(audioSource, selectedBeatmap.songInfo.bpm);
+                    trackPlayer = Instantiate(trackPlayerPrefab);
+                    trackPlayer.Init(audioSource, selectedBeatmap.songInfo.bpm, recording = false);
 
                     currentNoteSpawner = Instantiate(noteSpawnerPrefab);
-                    currentNoteSpawner.Init(currentMetronome);
+                    currentNoteSpawner.Init(trackPlayer);
 
                     currentConductor = Instantiate(conductorPrefab);
                     currentConductor.Init(currentNoteSpawner, currentBeatmap);
 
-                    currentMetronome.currentBeat += currentConductor.OnCurrentBeat;
-                    currentMetronome.songEnded += currentConductor.Metronome_OnSongOver;
-                    currentMetronome.songEnded += Metronome_OnCloseSong;
+                    trackPlayer.currentBeat += currentConductor.OnCurrentBeat;
+                    trackPlayer.songEnded += currentConductor.TrackPlayer_OnSongEnded;
+                    trackPlayer.songEnded += TrackPlayer_OnSongEnded;
                 }
             }
             else if (Input.GetKeyDown(KeyCode.R) && !recording && !inGame)
@@ -157,21 +156,15 @@ namespace soulful
                         }
                     };
 
-                    recorder = new Recorder(newBeatmap, songNamePopup);
-                    recorder.PrepareBeatmap();
-                    recorder.finishedRecording += Recorder_OnDoneRecording;
-
-                    currentMetronome = Instantiate(metronomePrefab);
-                    currentMetronome.Init(audioSource, newBeatmap.songInfo.bpm);
-
-                    currentMetronome.currentBeat += recorder.OnCurrentBeat;
-                    currentMetronome.songEnded += Metronome_OnCloseSong;
-                    currentMetronome.songEnded += recorder.Metronome_OnSongOver;
+                    trackPlayer = Instantiate(trackPlayerPrefab);
+                    trackPlayer.Init(audioSource, newBeatmap.songInfo.bpm, recording = true, newBeatmap);
+                    trackPlayer.finishedRecording += TrackPlayer_OnDoneRecording;
+                    trackPlayer.songEnded += TrackPlayer_OnSongEnded;
                 }
             }
         }
 
-        private void Metronome_OnCloseSong(object sender, EventArgs e)
+        private void TrackPlayer_OnSongEnded(object sender, EventArgs e)
         {
             Debug.Log("ending song state");
             lobbyUI.Show(); // this should be a callback in the UI prob
@@ -184,7 +177,7 @@ namespace soulful
 
             if (currentConductor != null)
             {
-                currentMetronome.currentBeat -= currentConductor.OnCurrentBeat;
+                trackPlayer.currentBeat -= currentConductor.OnCurrentBeat;
                 Destroy(currentConductor.gameObject);
                 currentConductor = null;
             }
@@ -193,22 +186,20 @@ namespace soulful
                 Destroy(currentNoteSpawner.gameObject);
                 currentNoteSpawner = null;
             }
-            if (recorder != null)
-            {
-                currentMetronome.currentBeat -= recorder.OnCurrentBeat;
-                currentMetronome.songEnded -= recorder.Metronome_OnSongOver;
-            }
 
-            currentMetronome.songEnded -= Metronome_OnCloseSong;
-            Destroy(currentMetronome.gameObject);
+            trackPlayer.songEnded -= TrackPlayer_OnSongEnded;
+            if (!recording)
+            {
+                Destroy(trackPlayer.gameObject);
+            }
         }
 
-        private void Recorder_OnDoneRecording(object sender, EventArgs _)
+        private void TrackPlayer_OnDoneRecording(object sender, EventArgs _)
         {
             recording = false;
             Debug.Log("done recording");
-            currentMetronome.currentBeat -= recorder.OnCurrentBeat;
-            recorder.finishedRecording -= Recorder_OnDoneRecording;
+            trackPlayer.finishedRecording -= TrackPlayer_OnDoneRecording;
+            Destroy(trackPlayer.gameObject);
         }
     }
 }

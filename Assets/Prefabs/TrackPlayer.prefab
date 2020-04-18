@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1415177037519241093}
   - component: {fileID: 1415177037519241094}
   m_Layer: 0
-  m_Name: Metronome
+  m_Name: TrackPlayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -45,4 +45,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   audioSource: {fileID: 0}
   beatTextPrefab: {fileID: 269934685407956892, guid: 55858c8d7fb5fd4499c35b7ae1a93654,
+    type: 3}
+  nameSongPopup: {fileID: 398942692909729564, guid: 3bde155b09d124e4094f99faeecf7674,
     type: 3}

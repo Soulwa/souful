@@ -23,6 +23,7 @@ namespace soulful
 
         public void Show()
         {
+            Debug.Log("showing popup");
             popupGroup.alpha = 1f;
             popupGroup.interactable = true;
         }
@@ -41,7 +42,7 @@ namespace soulful
             }
             else
             {
-                nameChosen(this, songNameInput.text);
+                nameChosen?.Invoke(this, songNameInput.text);
             }
         }
     }

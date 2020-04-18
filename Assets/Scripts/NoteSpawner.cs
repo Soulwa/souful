@@ -9,23 +9,23 @@ namespace soulful
         [SerializeField]
         private Note notePrefab;
 
-        private Metronome metronome;
+        private TrackPlayer trackPlayer;
 
-        public void Init(Metronome metronome)
+        public void Init(TrackPlayer metronome)
         {
-            this.metronome = metronome;
+            this.trackPlayer = metronome;
         }
 
         public Note SpawnNote()
         {
             Note note = Instantiate(notePrefab);
-            metronome.currentBeat += note.OnCurrentBeat;
+            trackPlayer.currentBeat += note.OnCurrentBeat;
             return note;
         }
 
         public void DespawnNote(Note note)
         {
-            metronome.currentBeat -= note.OnCurrentBeat;
+            trackPlayer.currentBeat -= note.OnCurrentBeat;
             Destroy(note.gameObject);
         }
     }

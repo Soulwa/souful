@@ -162,7 +162,6 @@ namespace soulful
                         highestCombo = combo;
                         activeSongUI.SetHighComboText(highestCombo);
                     }
-                    combo = 0;
 
                     targetNote = activeNotes[(int)dir].Dequeue();
                     noteSpawner.DespawnNote(targetNote);
@@ -227,7 +226,7 @@ namespace soulful
             return notes.ToArray();
         }
 
-        public void Metronome_OnSongOver(object sender, EventArgs _)
+        public void TrackPlayer_OnSongEnded(object sender, EventArgs _)
         {
             Destroy(activeSongUI.gameObject);
             Destroy(gameObject);

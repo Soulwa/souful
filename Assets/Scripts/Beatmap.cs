@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace soulful
@@ -25,6 +26,21 @@ namespace soulful
         public void Clear()
         {
             instructions.Clear();
+        }
+
+        public Beatmap DeepCopy()
+        {
+            return new Beatmap
+            {
+                instructions = instructions.Select(i => i).ToList(),
+                notes = notes,
+                songInfo = new SongInfo
+                {
+                    bpm = songInfo.bpm,
+                    pathToMusic = songInfo.pathToMusic,
+                    name = songInfo.name,
+                },
+            };
         }
     }
 
