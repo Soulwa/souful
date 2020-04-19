@@ -8,6 +8,8 @@ using soulful.Utils;
 
 namespace soulful
 {
+    // terrible monolithic class for handling game state
+    // trackplayer should be in charge of most stuff, in a simpler way
     public class LobbyManager : MonoBehaviour
     {
         [SerializeField]
