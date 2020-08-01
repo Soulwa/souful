@@ -1,4 +1,4 @@
-# souful
+# soulful
 
 soulful is a rhythm game where you can make your own beatmaps and play them yourself, or send them to others to play
 
